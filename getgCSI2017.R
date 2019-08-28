@@ -56,19 +56,6 @@ curationTissue <- curationTissue[ , c("unique.tissueid", "gCSI.tissueid")]
 rownames(curationTissue) <- curationCell[ , "unique.cellid"]
 rownames(curationCell) <- curationCell[ , "unique.cellid"]
 
-cell_Info_match <- matchToIDTableCELL(cellInfo$CellLineName, curationCell, "gCSI.cellid")
-cellInfo$unique.id <- as.character(cell_Info_match)
-rownames(cellInfo) <- cellInfo$unique.id
-
-cellInfo[nrow(cellInfo)+392,] <- NA
-
-rownames(cellInfo)[411:802] <- curationCell$unique.cellid[which(!curationCell$unique.cellid %in% cellInfo$unique.id)]
-cellInfo$CellLineName[411:802] <- curationCell$gCSI.cellid[which(!curationCell$unique.cellid %in% cellInfo$unique.id)]
-cellInfo$unique.id[411:802] <- curationCell$unique.cellid[which(!curationCell$unique.cellid %in% cellInfo$unique.id)]
-
-cellInfo$tissueid[411:802] <- curationTissue$unique.tissueid[match(rownames(cellInfo)[411:802], rownames(curationTissue))]
-
-
 curationDrug <- drug_all[which(!is.na(drug_all[ , "gCSI.drugid"])),]
 curationDrug <- curationDrug[ , c("unique.drugid", "gCSI.drugid")]
 rownames(curationDrug) <- curationDrug[ , "unique.drugid"]
@@ -83,7 +70,7 @@ gCSI@molecularProfiles$rnaseq$cellid <- gsub("MDA-MB-157", "MDAMB157", gCSI@mole
 
 gCSI_2017 <- PharmacoSet(molecularProfiles=gCSI@molecularProfiles$rnaseq,
                        name="gCSI",
-                       cell=cellInfo,
+                       cell=curationCell,
                        drug=curationDrug,
                        sensitivityInfo=sensitivityInfo_2017,
                        sensitivityRaw=raw.sensitivity,
