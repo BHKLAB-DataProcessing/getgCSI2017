@@ -63,15 +63,10 @@ rownames(curationDrug) <- curationDrug[ , "unique.drugid"]
 
 sensitivityInfo_2017 <- sensitivityInfo_2017[rownames(raw.sensitivity),]
 
-gCSI@molecularProfiles$rnaseq$cellid <- gsub("U266B1", "U-266", gCSI@molecularProfiles$rnaseq$cellid) #compares molecular profile cell.id to unique.id of cell.info for checkPSet, so we need to change to U-266 (unique id of U266B1).
+emptyEset <- ExpressionSet()
+annotation(emptyEset) <- "issue with cell annotation, will fix later"
 
-gCSI@molecularProfiles$rnaseq$cellid <- gsub("MDA-MB-157", "MDAMB157", gCSI@molecularProfiles$rnaseq$cellid)
-
-  z <- c(z,c(
-  "rnaseq"=gCSI@molecularProfiles$rnaseq)
-)
-
-gCSI_2017 <- PharmacoSet(molecularProfiles=z,
+gCSI_2017 <- PharmacoSet(molecularProfiles=emptyEset,
                        name="gCSI",
                        cell=curationCell,
                        drug=curationDrug,
