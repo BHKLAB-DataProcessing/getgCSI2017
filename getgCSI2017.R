@@ -60,7 +60,9 @@ curationDrug <- drug_all[which(!is.na(drug_all[ , "gCSI.drugid"])),]
 curationDrug <- curationDrug[ , c("unique.drugid", "gCSI.drugid")]
 rownames(curationDrug) <- curationDrug[ , "unique.drugid"]
 
-
+curationCell[803,] <- c("U-266", "U-266")
+rownames(curationCell)[803] <- "U-266"
+    
 sensitivityInfo_2017 <- sensitivityInfo_2017[rownames(raw.sensitivity),]
 
 emptyEset <- ExpressionSet()
