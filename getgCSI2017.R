@@ -66,7 +66,7 @@ sensitivityInfo_2017 <- sensitivityInfo_2017[rownames(raw.sensitivity),]
 emptyEset <- ExpressionSet()
 annotation(emptyEset) <- "issue with cell annotation, will fix later"
 
-gCSI_2017 <- PharmacoSet(molecularProfiles=list("rnaseq" = emptyEset),
+gCSI_2017 <- PharmacoSet(molecularProfiles=list("rna" = emptyEset),
                        name="gCSI",
                        cell=curationCell,
                        drug=curationDrug,
