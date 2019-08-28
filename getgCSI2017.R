@@ -67,8 +67,11 @@ gCSI@molecularProfiles$rnaseq$cellid <- gsub("U266B1", "U-266", gCSI@molecularPr
 
 gCSI@molecularProfiles$rnaseq$cellid <- gsub("MDA-MB-157", "MDAMB157", gCSI@molecularProfiles$rnaseq$cellid)
 
+  z <- c(z,c(
+  "rnaseq"=gCSI@molecularProfiles$rnaseq)
+)
 
-gCSI_2017 <- PharmacoSet(molecularProfiles=gCSI@molecularProfiles$rnaseq,
+gCSI_2017 <- PharmacoSet(molecularProfiles=z,
                        name="gCSI",
                        cell=curationCell,
                        drug=curationDrug,
