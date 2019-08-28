@@ -31,10 +31,10 @@ load("/pfs/getgCSI2017/gcsidrugpost.RData")
 load("/pfs/gcsi2017raw/sensitivity.RData")
 
 recomputed_2017 <- res
-sensitivityProfiles_2017 <- data.frame("auc_recomputed" = NA, "ic50_recomputed"=NA, "ic50_published"=NA, "meanviability_published"=NA, "HS"=NA, "E_inf"=NA, "EC50"=NA)
+sensitivityProfiles_2017 <- data.frame("AAC" = NA, "IC50"=NA, "ic50_published"=NA, "meanviability_published"=NA, "HS"=NA, "E_inf"=NA, "EC50"=NA)
 sensitivityProfiles_2017[nrow(sensitivityProfiles_2017)+6454,] <- NA
-sensitivityProfiles_2017[,"auc_recomputed"] <- as.numeric(recomputed_2017[,"auc_recomputed"])
-sensitivityProfiles_2017[,"ic50_recomputed"] <- as.numeric((recomputed_2017[,"ic50_recomputed"]))
+sensitivityProfiles_2017[,"AAC"] <- as.numeric(recomputed_2017[,"AAC"])
+sensitivityProfiles_2017[,"IC50"] <- as.numeric((recomputed_2017[,"IC50"]))
 sensitivityProfiles_2017[,"HS"] <- as.numeric((recomputed_2017[,"HS"]))
 sensitivityProfiles_2017[,"E_inf"] <- as.numeric((recomputed_2017[,"E_inf"]))
 sensitivityProfiles_2017[,"EC50"] <- as.numeric((recomputed_2017[,"EC50"]))
