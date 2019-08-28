@@ -56,6 +56,7 @@ curationTissue <- curationTissue[ , c("unique.tissueid", "gCSI.tissueid")]
 rownames(curationTissue) <- curationCell[ , "unique.cellid"]
 rownames(curationCell) <- curationCell[ , "unique.cellid"]
 
+cell_Info_match <- matchToIDTableCELL(cellInfo$CellLineName, curationCell, "gCSI.cellid")
 cellInfo$unique.id <- as.character(cell_Info_match)
 rownames(cellInfo) <- cellInfo$unique.id
 
