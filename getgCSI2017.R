@@ -30,6 +30,7 @@ load("/pfs/gcsi2017ProfilesAssemble/profiles.RData")
 load("/pfs/getgCSI2017/gcsidrugpost.RData")
 load("/pfs/gcsi2017raw/sensitivity.RData")
 
+    
 recomputed_2017 <- res
 sensitivityProfiles_2017 <- data.frame("AAC" = NA, "IC50"=NA, "ic50_published"=NA, "meanviability_published"=NA, "HS"=NA, "E_inf"=NA, "EC50"=NA)
 sensitivityProfiles_2017[nrow(sensitivityProfiles_2017)+6454,] <- NA
@@ -38,8 +39,8 @@ sensitivityProfiles_2017[,"IC50"] <- as.numeric((recomputed_2017[,"IC50"]))
 sensitivityProfiles_2017[,"HS"] <- as.numeric((recomputed_2017[,"HS"]))
 sensitivityProfiles_2017[,"E_inf"] <- as.numeric((recomputed_2017[,"E_inf"]))
 sensitivityProfiles_2017[,"EC50"] <- as.numeric((recomputed_2017[,"EC50"]))
-sensitivityProfiles_2017[,"ic50_published"] <- gcsi.ic50[rownames(sensitivityRaw_2017),"IC50"]
-sensitivityProfiles_2017[,"meanviability_published"] <- gcsi.mv[rownames(sensitivityRaw_2017),"Mean Viability"]
+sensitivityProfiles_2017[,"ic50_published"] <- gcsi.ic50[rownames(raw.sensitivity),"IC50"]
+sensitivityProfiles_2017[,"meanviability_published"] <- gcsi.mv[rownames(raw.sensitivity),"Mean Viability"]
 rownames(sensitivityProfiles_2017) <- rownames(recomputed_2017)
 sensitivityProfiles_2017 <- sensitivityProfiles_2017[rownames(raw.sensitivity),]
 
@@ -84,7 +85,7 @@ gCSI_2017 <- PharmacoSet(molecularProfiles=gCSI@molecularProfiles$rnaseq,
                        cell=cellInfo,
                        drug=curationDrug,
                        sensitivityInfo=sensitivityInfo_2017,
-                       sensitivityRaw=sensitivityRaw_2017,
+                       sensitivityRaw=raw.sensitivity,
                        sensitivityProfiles=sensitivityProfiles_2017,
                        curationCell=curationCell,
                        curationDrug=curationDrug,
