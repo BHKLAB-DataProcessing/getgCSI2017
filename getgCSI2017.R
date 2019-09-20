@@ -130,6 +130,22 @@ mapInfo <- data.frame(gCSI.drugid = unique(sensitivity.info$drugid),
 stopifnot(!anyNA(mapInfo[,2]))
 sensitivity.info$drugid <- mapInfo[match(sensitivity.info$drugid, mapInfo[,1]),2]
 
+
+
+cellInfo <- as.data.frame(cellInfo)
+
+cellinall <- unionList(rnaseq$cellid, sensitivity.info$cellid, cnv$cellid, mut$cellid)
+
+newCells <- setdiff(cellinall, rownames(cellInfo))
+
+newrows <- cellInfo[newCells,]
+rownames(newrows) <- newCells
+cellInfo <- rbind(cellInfo, newrows)
+
+cellInfo$tissueid <- curationTissue[rownames(cellInfo), "unique.tissueid"]
+
+
+
 z <- list()
 z <- c(z,c(
   "rnaseq"=rnaseq,
