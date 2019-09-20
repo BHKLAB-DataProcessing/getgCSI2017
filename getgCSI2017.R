@@ -31,7 +31,7 @@ nthread=1
 options(stringsAsFactors = FALSE)
 z <- list()
 
-dir.prefix <- "~/pfs"
+dir.prefix <- "pfs"
 
 matchToIDTable <- function(ids,tbl, column, returnColumn="unique.cellid") {
   sapply(ids, function(x) {
