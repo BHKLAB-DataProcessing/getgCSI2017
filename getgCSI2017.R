@@ -77,7 +77,7 @@ library(abind)
 
 raw.sensitivity <- abind(raw.sensitivity, new.rows, along=1)
 
-raw.sensitivity <- raw.sensitivity[rownames(sensitivity.info)]
+raw.sensitivity <- raw.sensitivity[rownames(sensitivity.info),,]
 
 cell_all <- read.csv(file.path(dir.prefix, "downAnnotations/cell_annotation_all.csv"), na.strings=c("", " ", "NA"))
 drug_all <- read.csv(file.path(dir.prefix, "downAnnotations/drugs_with_ids.csv"), na.strings=c("", " ", "NA"))
