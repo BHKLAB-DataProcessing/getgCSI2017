@@ -203,5 +203,5 @@ gCSI_2017 <- PharmacoSet(molecularProfiles=z,
                        curationTissue=curationTissue,
                        datasetType="sensitivity")
 
-save(gCSI_2017, file=file.path(dir.prefix, "out/gCSI_2017.RData"))
+saveRDS(gCSI_2017, file=file.path(dir.prefix, "out/gCSI_2017.rds"))
     
