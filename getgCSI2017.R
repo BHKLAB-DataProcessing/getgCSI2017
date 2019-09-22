@@ -51,6 +51,7 @@ load(file.path(dir.prefix, "gcsi2017ProfilesAssemble/profiles.RData"))
 # load(file.path(dir.prefix, "getgCSI2017/gcsidrugpost.RData"))
 load(file.path(dir.prefix, "gcsi2017RawSensitivity/raw.sensitivity.RData"))
 load(file.path(dir.prefix, "gcsi2017RawSensitivity/gCSI_molData.RData"))
+load(file.path(dir.prefix, "downloadrnagCSI/gCSI_2017_molecprofile.RData"))
 
 
 
@@ -83,10 +84,10 @@ cell_all <- read.csv(file.path(dir.prefix, "downAnnotations/cell_annotation_all.
 drug_all <- read.csv(file.path(dir.prefix, "downAnnotations/drugs_with_ids.csv"), na.strings=c("", " ", "NA"))
 
 
-curationCell <- cell_all[which(!is.na(cell_all[ , "gCSI.cellid"])),]
-curationTissue <- cell_all[which(!is.na(cell_all[ , "gCSI.cellid"])),]
-curationCell <- curationCell[ , c("unique.cellid", "gCSI.cellid")]
-curationTissue <- curationTissue[ , c("unique.tissueid", "gCSI.tissueid")]
+curationCell <- cell_all[apply(!is.na(cell_all[,c("gCSI.cellid", "GNE.cellid")]),1,any),]
+curationTissue <- cell_all[apply(!is.na(cell_all[,c("gCSI.cellid", "GNE.cellid")]),1,any),]
+curationCell <- curationCell[ , c("unique.cellid", "gCSI.cellid", "GNE.cellid")]
+curationTissue <- curationTissue[ , c("unique.tissueid", "gCSI.tissueid", "GNE.tissueid")]
 
 rownames(curationTissue) <- curationCell[ , "unique.cellid"]
 rownames(curationCell) <- curationCell[ , "unique.cellid"]
@@ -102,16 +103,50 @@ stopifnot(!anyNA(reps))
 mut$cellid <- reps
 mut$tissueid <- curationTissue[mut$cellid, "unique.tissueid"]
 
-reps <- matchToIDTable(rnaseq$cellid, curationCell, "gCSI.cellid", "unique.cellid")
-stopifnot(!anyNA(reps))
-rnaseq$cellid <- reps
-rnaseq$tissueid <- curationTissue[rnaseq$cellid, "unique.tissueid"]
-
 
 reps <- matchToIDTable(cnv$cellid, curationCell, "gCSI.cellid", "unique.cellid")
 stopifnot(!anyNA(reps))
 cnv$cellid <- reps
 cnv$tissueid <- curationTissue[cnv$cellid, "unique.tissueid"]
+
+
+rnaseq <- gCSI@molecularProfiles$rnaseq
+
+rnaseq$cellid <- rnaseq$Cell_line
+
+reps <- matchToIDTable(rnaseq$cellid, curationCell, "GNE.cellid", "unique.cellid")
+stopifnot(!anyNA(reps))
+rnaseq$cellid <- reps
+# rnaseq$tissueid <- curationTissue[rnaseq$cellid, "unique.tissueid"]
+
+
+
+rnaseq.counts <- gCSI@molecularProfiles$rnaseq.counts
+
+rnaseq.counts$cellid <- rnaseq.counts$Cell_line
+
+reps <- matchToIDTable(rnaseq.counts$cellid, curationCell, "GNE.cellid", "unique.cellid")
+stopifnot(!anyNA(reps))
+rnaseq.counts$cellid <- reps
+
+
+isoforms <- gCSI@molecularProfiles$isoforms
+
+isoforms$cellid <- isoforms$Cell_line
+
+reps <- matchToIDTable(isoforms$cellid, curationCell, "GNE.cellid", "unique.cellid")
+stopifnot(!anyNA(reps))
+isoforms$cellid <- reps
+# rnaseq$tissueid <- curationTissue[rnaseq$cellid, "unique.tissueid"]
+
+
+isoforms.counts <- gCSI@molecularProfiles$isoforms.counts
+
+isoforms.counts$cellid <- isoforms.counts$Cell_line
+
+reps <- matchToIDTable(isoforms.counts$cellid, curationCell, "GNE.cellid", "unique.cellid")
+stopifnot(!anyNA(reps))
+isoforms.counts$cellid <- reps
 
 
 
@@ -149,13 +184,16 @@ cellInfo$tissueid <- curationTissue[rownames(cellInfo), "unique.tissueid"]
 z <- list()
 z <- c(z,c(
   "rnaseq"=rnaseq,
+  "rnaseq.counts" = rnaseq.counts,
+  "isoforms" = isoforms,
+  "isoforms.counts" = isoforms.counts,
   "cnv"=cnv,
   "mutation"=mut)
 )
 
 gCSI_2017 <- PharmacoSet(molecularProfiles=z,
                        name="gCSI",
-                       cell=curationCell,
+                       cell=cellInfo,
                        drug=curationDrug,
                        sensitivityInfo=sensitivity.info,
                        sensitivityRaw=raw.sensitivity,
