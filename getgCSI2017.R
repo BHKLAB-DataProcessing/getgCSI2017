@@ -61,8 +61,8 @@ sensitivityProfiles_2017 <- data.frame("aac_recomputed" = NA, "ic50_recomputed"=
 sensitivityProfiles_2017[nrow(published.profiles),] <- NA
 rownames(sensitivityProfiles_2017) <- rownames(published.profiles)
 
-sensitivityProfiles_2017[rownames(recomputed_2017),"aac_recomputed"] <- as.numeric(recomputed_2017[,"AAC"])
-sensitivityProfiles_2017[rownames(recomputed_2017),"ic50_recomputed"] <- as.numeric((recomputed_2017[,"IC50"]))
+sensitivityProfiles_2017[rownames(recomputed_2017),"aac_recomputed"] <- as.numeric(recomputed_2017[,"aac_recomputed"])
+sensitivityProfiles_2017[rownames(recomputed_2017),"ic50_recomputed"] <- as.numeric((recomputed_2017[,"ic50_recomputed"]))
 sensitivityProfiles_2017[rownames(recomputed_2017),"HS"] <- as.numeric((recomputed_2017[,"HS"]))
 sensitivityProfiles_2017[rownames(recomputed_2017),"E_inf"] <- as.numeric((recomputed_2017[,"E_inf"]))
 sensitivityProfiles_2017[rownames(recomputed_2017),"EC50"] <- as.numeric((recomputed_2017[,"EC50"]))
