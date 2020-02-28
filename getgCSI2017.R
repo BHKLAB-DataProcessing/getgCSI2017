@@ -1,6 +1,5 @@
 library(PharmacoGx)
 
-library(PharmacoGx)
 # library(devtools)
 
 # install.packages("BiocManager")
