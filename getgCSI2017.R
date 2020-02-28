@@ -69,7 +69,7 @@ load(file.path(dir.prefix, "gcsi2017ProfileAssemble/profiles.RData"))
 # load(file.path(dir.prefix, "getgCSI2017/gcsidrugpost.RData"))
 load(file.path(dir.prefix, "gcsi2017RawSensitivity/raw.sensitivity.RData"))
 load(file.path(dir.prefix, "gcsi2017RawSensitivity/gCSI_molData.RData"))
-load(file.path(dir.prefix, "downloadrnagCSI/gCSI_2017_molecprofile.RData"))
+#load(file.path(dir.prefix, "downloadrnagCSI/gCSI_2017_molecprofile.RData"))
 
 
 
