@@ -289,7 +289,9 @@ rnaseq.sampleinfo[ , "cellid"] <-  matchToIDTable(ids=rnaseq.sampleinfo[ , "Cell
 }
 
 rnaseq_cellid_all <- pData(rnaseq_results[[1]])[,"cellid"]
-
+reps <- matchToIDTable(rownames(cellInfo), curationCell, "gCSI.cellid", "unique.cellid")
+stopifnot(!anyNA(reps))
+rownames(cellInfo) <- reps
 
 
 cellInfo <- as.data.frame(cellInfo)
