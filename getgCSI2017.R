@@ -453,7 +453,7 @@ gCSI_2017 <- PharmacoSet(molecularProfiles=z,
                  
  #filter noisy curves from PSet (modified function to take into account standardized conc range)
 		 
-detach("package:CoreGx", unload=TRUE)
+#detach("package:CoreGx", unload=TRUE)
 		 
 filterNoisyCurves2 <- function(pSet, epsilon=25 , positive.cutoff.percent=.80, mean.viablity=200, nthread=1) {
 acceptable <- mclapply(rownames(PharmacoGx::sensitivityInfo(pSet)), function(xp) {
