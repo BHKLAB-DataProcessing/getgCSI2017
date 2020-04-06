@@ -307,6 +307,9 @@ cellInfo <- rbind(cellInfo, newrows)
 cellInfo$tissueid <- curationTissue[rownames(cellInfo), "unique.tissueid"]
 cellInfo$cellid <- rownames(cellInfo)
 
+curationTissue <- curationTissue[rownames(cellInfo),]
+curationCell <- curationCell[rownames(cellInfo),]
+
 
 z <- list()
 
