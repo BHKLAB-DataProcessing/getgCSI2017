@@ -513,9 +513,12 @@ noisy_out <- filterNoisyCurves2(gCSI_2017)
 print("filter done")
 gCSI_2017@sensitivity$profiles[noisy_out$noisy, ] <- NA                
                           
-saveRDS(gCSI_2017, file="/pfs/out/gCSI_2017.rds")
-
+saveRDS(gCSI_2017, file="/pfs/out/gCSI.rds")
+		 
+dataset <- "gCSI"	
+		 
 #output ORCESTRA_ID and Pachyderm commit id
+write.table(dataset, file="/pfs/out/dataset.txt", row.names = F ,quote = F, sep = "\t", col.names = F)
 write.table(ORCESTRA_ID, file="/pfs/out/orcestra_id.txt", row.names = F ,quote = F, sep = "\t", col.names = F)				   
 pach_commit_id <- Sys.getenv("PACH_OUTPUT_COMMIT_ID")
 write.table(pach_commit_id, file="/pfs/out/commit_id.txt", row.names = F ,quote = F, sep = "\t", col.names = F) 
