@@ -100,7 +100,8 @@ raw.sensitivity <- raw.sensitivity[rownames(sensitivity.info),,]
 
 cell_all <- read.csv(file.path(dir.prefix, "downAnnotations/cell_annotation_all.csv"), na.strings=c("", " ", "NA"))
 drug_all <- read.csv(file.path(dir.prefix, "downAnnotations/drugs_with_ids.csv"), na.strings=c("", " ", "NA"))
-
+drug_all <- drug_all[ , c("unique.drugid", "gCSI.drugid","smiles","inchikey","cid","FDA")]
+rownames(drug_all) <- drug_all[ , "unique.drugid"]
 
 curationCell <- cell_all[apply(!is.na(cell_all[,c("gCSI.cellid", "GNE.cellid")]),1,any),]
 curationTissue <- cell_all[apply(!is.na(cell_all[,c("gCSI.cellid", "GNE.cellid")]),1,any),]
@@ -113,6 +114,11 @@ rownames(curationCell) <- curationCell[ , "unique.cellid"]
 curationDrug <- drug_all[which(!is.na(drug_all[ , "gCSI.drugid"])),]
 curationDrug <- curationDrug[ , c("unique.drugid", "gCSI.drugid")]
 rownames(curationDrug) <- curationDrug[ , "unique.drugid"]
+
+drugInfo <- data.frame("gCSI.drugid"=curationDrug$gCSI.drugid, "drugid"=curationDrug$unique.drugid)
+rownames(drugInfo) <- drugInfo$drugid
+drug_all <- drug_all[rownames(drugInfo),]
+drugInfo[,c("smiles","inchikey","cid","FDA")] <- drug_all[,c("smiles","inchikey","cid","FDA")]
 
 ## Only doing this for data added to the pset.
 
@@ -321,6 +327,9 @@ z <- c(z,c(
 
 sensitivity.info <- as.data.frame(sensitivity.info)
 
+drugInfo <- drugInfo[unique(sensitivity.info$drugid),]
+curationDrug <- curationDrug[rownames(drugInfo),]
+
 standardizeRawDataConcRange <- function(sens.info, sens.raw){
 	unq.drugs <- unique(sens.info$drugid)
 
@@ -413,28 +422,28 @@ standardizeRawDataConcRange <- function(sens.info, sens.raw){
 		 
 		 
 #add cellosaurus disease type to cell-info
-colnames(cellInfo)[which(names(cellInfo) == "cellid")] <- "unique.cellid"
-disease <- cell_all$Cellosaurus.Disease.Type[match(cellInfo$unique.cellid, cell_all$unique.cellid)]
+
+disease <- cell_all$Cellosaurus.Disease.Type[match(cellInfo$cellid, cell_all$unique.cellid)]
 cellInfo$Cellosaurus.Disease.Type <- disease
 		 
 #add cellosaurus assession to cell-info
-assession <- cell_all$Cellosaurus.Accession.id[match(cellInfo$unique.cellid, cell_all$unique.cellid)]
+assession <- cell_all$Cellosaurus.Accession.id[match(cellInfo$cellid, cell_all$unique.cellid)]
 cellInfo$Cellosaurus.Accession.id <- assession
 		 
 #add pharmacodb id to cell-info
-pdb <- cell_all$PharmacoDB.id[match(cellInfo$unique.cellid, cell_all$unique.cellid)]
+pdb <- cell_all$PharmacoDB.id[match(cellInfo$cellid, cell_all$unique.cellid)]
 cellInfo$PharmacoDB.id <- pdb
 
 #add study tissue id to cell_info
-study_tissue <- cell_all$unique.tissueid.fromstudies[match(cellInfo$unique.cellid, cell_all$unique.cellid)]
+study_tissue <- cell_all$unique.tissueid.fromstudies[match(cellInfo$cellid, cell_all$unique.cellid)]
 cellInfo$unique.tissueid.fromstudies <- study_tissue
 		 
 #add study cell-line type to cell_info
-cell_type <- cell_all$CellLine.Type[match(cellInfo$unique.cellid, cell_all$unique.cellid)]
+cell_type <- cell_all$CellLine.Type[match(cellInfo$cellid, cell_all$unique.cellid)]
 cellInfo$CellLine.Type <- cell_type
 		 
 #add metastatic info to cell_info		 
-metastatic <- cell_all$Metastatic[match(cellInfo$unique.cellid, cell_all$unique.cellid)]
+metastatic <- cell_all$Metastatic[match(cellInfo$cellid, cell_all$unique.cellid)]
 cellInfo$Metastatic <- metastatic
 		 
 		 
@@ -444,7 +453,7 @@ standardize <- standardizeRawDataConcRange(sens.info = sensitivity.info, sens.ra
 gCSI_2017 <- PharmacoSet(molecularProfiles=z,
                        name="gCSI",
                        cell=cellInfo,
-                       drug=curationDrug,
+                       drug=drugInfo,
                        sensitivityInfo=standardize$sens.info,
                        sensitivityRaw=standardize$sens.raw,
                        sensitivityProfiles=sensitivityProfiles_2017,
