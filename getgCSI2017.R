@@ -115,7 +115,7 @@ curationDrug <- drug_all[which(!is.na(drug_all[ , "gCSI.drugid"])),]
 curationDrug <- curationDrug[ , c("unique.drugid", "gCSI.drugid")]
 rownames(curationDrug) <- curationDrug[ , "unique.drugid"]
 
-drugInfo <- data.frame("gCSI.drugid"=curationDrug$gCSI.drugid, "drugid"=curationDrug$unique.drugid)
+drugInfo <- data.frame("drugid"=curationDrug$unique.drugid)
 rownames(drugInfo) <- drugInfo$drugid
 drug_all <- drug_all[rownames(drugInfo),]
 drugInfo[,c("smiles","inchikey","cid","FDA")] <- drug_all[,c("smiles","inchikey","cid","FDA")]
