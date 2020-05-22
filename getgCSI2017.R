@@ -27,6 +27,8 @@ library(reshape2)
 library(abind)
 library(data.table)
 library(parallel)
+library(CoreGx)
+library(SummarizedExperiment)
 
 verbose=FALSE
 nthread=1
@@ -302,7 +304,7 @@ rownames(cellInfo) <- reps
 
 cellInfo <- as.data.frame(cellInfo)
 
-cellinall <- unionList(rnaseq_cellid_all, sensitivity.info$cellid, cnv$cellid, mut$cellid)
+cellinall <- CoreGx::.unionList(rnaseq_cellid_all, sensitivity.info$cellid, cnv$cellid, mut$cellid)
 
 newCells <- setdiff(cellinall, rownames(cellInfo))
 
@@ -445,12 +447,50 @@ cellInfo$CellLine.Type <- cell_type
 #add metastatic info to cell_info		 
 metastatic <- cell_all$Metastatic[match(cellInfo$cellid, cell_all$unique.cellid)]
 cellInfo$Metastatic <- metastatic
+	
+
+.converteSetToSE <- function(eSets) {
+  
+  SEfinal <- lapply(eSets,
+         function(eSet){
+             # Change rownames from probes to EnsemblGeneId for rna data type
+             if (grepl("^rna$", Biobase::annotation(eSet))) {
+               rownames(eSet) <- Biobase::fData(eSet)$EnsemblGeneId
+             }
+             
+             # Build summarized experiment from eSet
+             SE <- SummarizedExperiment::SummarizedExperiment(
+               ## TODO:: Do we want to pass an environment for better memory efficiency?
+               assays=S4Vectors::SimpleList(as.list(Biobase::assayData(eSet))
+               ),
+               # Switch rearrange columns so that IDs are first, probes second
+               rowData=S4Vectors::DataFrame(Biobase::fData(eSet),
+                                            rownames=rownames(Biobase::fData(eSet)) 
+               ),
+               colData=S4Vectors::DataFrame(Biobase::pData(eSet),
+                                            rownames=rownames(Biobase::pData(eSet))
+               ),
+               metadata=list("experimentData" = eSet@experimentData, 
+                             "annotation" = Biobase::annotation(eSet), 
+                             "protocolData" = Biobase::protocolData(eSet)
+               )
+             )
+             ## TODO:: Determine if this can be done in the SE constructor?
+             # Extract names from expression set
+             SummarizedExperiment::assayNames(SE) <- Biobase::assayDataElementNames(eSet)
+             mDataType <- Biobase::annotation(eSet)
+             eSets[[mDataType]] <- SE
+         })
+  #setNames(pSet@molecularProfiles, names(eSets))
+  return(SEfinal)
+}
 		 
+z <- .converteSetToSE(z)
 		 
 standardize <- standardizeRawDataConcRange(sens.info = sensitivity.info, sens.raw = raw.sensitivity)
 
 
-gCSI_2017 <- PharmacoSet(molecularProfiles=z,
+gCSI_2017 <- PharmacoGx::PharmacoSet(molecularProfiles=z,
                        name="gCSI",
                        cell=cellInfo,
                        drug=drugInfo,
