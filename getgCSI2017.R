@@ -562,7 +562,8 @@ return(list("noisy"=noisy, "ok"=acceptable))
 noisy_out <- filterNoisyCurves2(gCSI_2017)
 print("filter done")
 gCSI_2017@sensitivity$profiles[noisy_out$noisy, ] <- NA                
-                          
+
+gCSI_2017@annotation$version <- 2
 saveRDS(gCSI_2017, file="/pfs/out/gCSI.rds")
 		 
 dataset <- "gCSI"	
