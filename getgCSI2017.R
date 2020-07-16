@@ -42,6 +42,8 @@ print(rnaseq_select)
 rnaseq_results <- list()
 ORCESTRA_ID = tail(rnaseq_select, n=1)
 
+cnv_select <-  grep('cnv', rnaseq_select)
+mutation_select <-  grep('mutation', rnaseq_select)
 	  
 tools <- grep(pattern = 'Kallisto|Salmon', x = rnaseq_select)
 tools <- rnaseq_select[tools]
@@ -318,6 +320,30 @@ cellInfo$cellid <- rownames(cellInfo)
 curationTissue <- curationTissue[rownames(cellInfo),]
 curationCell <- curationCell[rownames(cellInfo),]
 
+if (length(cnv_select) > 0){
+  cnv_cells_id <- cnv$cellid
+} else {
+  cnv_cells_id <- c()
+  cnv <- ExpressionSet()
+  pData(cnv)$cellid <- character()
+  pData(cnv)$batchid <- character()
+  fData(cnv)$BEST <- vector()
+  fData(cnv)$Symbol <- character()
+  annotation(cnv) <- "CNV data was not selected for on ORCESTRA"
+}
+		 
+if (length(mutation_select) > 0){
+  mutation_cells_id <- mut$cellid
+} else {
+  mutation_cells_id <- c()
+  mut <-  ExpressionSet()
+  pData(mut)$cellid <- character()
+  pData(mut)$batchid <- character()
+  fData(mut)$BEST <- vector()
+  fData(mut)$Symbol <- character()
+  annotation(mut) <- "Mutation data was not selected for on ORCESTRA"
+}
+
 
 z <- list()
 
@@ -331,6 +357,7 @@ sensitivity.info <- as.data.frame(sensitivity.info)
 
 drugInfo <- drugInfo[unique(sensitivity.info$drugid),]
 curationDrug <- curationDrug[rownames(drugInfo),]
+
 
 standardizeRawDataConcRange <- function(sens.info, sens.raw){
 	unq.drugs <- unique(sens.info$drugid)
@@ -486,6 +513,12 @@ cellInfo$Metastatic <- metastatic
 }
 		 
 z <- .converteSetToSE(z)
+
+cells_keep <- unique(c(rnaseq_cellid_all, sensitivity.info$cellid, cnv_cells_id, mutation_cells_id))
+		 
+cellInfo <- cellInfo[cells_keep,]
+curationCell <- curationCell[cells_keep,]
+curationTissue <- curationTissue[cells_keep,]
 		 
 standardize <- standardizeRawDataConcRange(sens.info = sensitivity.info, sens.raw = raw.sensitivity)
 
