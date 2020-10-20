@@ -430,7 +430,7 @@ curationCell <- curationCell[cells_keep,]
 curationTissue <- curationTissue[cells_keep,]
 
 gCSI_2017 <- PharmacoGx::PharmacoSet(molecularProfiles=z,
-                       name="gCSI",
+                       name="gCSI2017",
                        cell=cellInfo,
                        drug=drugInfo,
                        sensitivityInfo=sensitivity.info,
