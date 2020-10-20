@@ -589,7 +589,7 @@ print("unfiltered PSet")
 }
 
 gCSI_2017 <- PharmacoGx::PharmacoSet(molecularProfiles=z,
-                       name="gCSI2017",
+                       name="gCSI",
                        cell=cellInfo,
                        drug=drugInfo,
                        sensitivityInfo=sensitivity.info,
