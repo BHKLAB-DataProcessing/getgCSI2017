@@ -1,5 +1,3 @@
-library(PharmacoGx)
-
 # library(devtools)
 
 # install.packages("BiocManager")
@@ -15,13 +13,13 @@ library(PharmacoGx)
 
 # library(compareDrugScreens)
 
+library(PharmacoGx)
 library(readr)
 library(tximport)
 library(rhdf5)
 library(gdata)
 library(readxl)
 library(openxlsx)
-#library(CoreGx)
 library(Biobase)
 library(reshape2)
 library(abind)
