@@ -610,7 +610,7 @@ print("unfiltered PSet")
 }
 	     
 gCSI_2017@annotation$version <- 2
-saveRDS(gCSI_2017, file="/pfs/out/gCSI_2017.rds")
+saveRDS(gCSI_2017, file="/pfs/out/gCSI.rds")
 		 
 dataset <- "gCSI"	
 		 
