@@ -27,6 +27,7 @@ library(data.table)
 library(parallel)
 library(CoreGx)
 library(SummarizedExperiment)
+library(biocompute)
 
 verbose=FALSE
 nthread=1
